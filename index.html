@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>세종한국어 회화 익힘책 1-1 종합 복습 앱</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // 📚 세종한국어 회화 익힘책 1-1 전체 (1~7과) 경량화 데이터베이스
+    const SEJONG_DB = {
+      1: {
+        title: "01과 저는 이지윤이에요",
+        grammar: "N이에요/예요, N은/는",
+        vocab: [
+          { kr: "선생님", en: "Teacher", ex: "저는 한국어 선생님이에요." },
+          { kr: "학생", en: "Student", ex: "마이클 씨는 학생이에요." },
+          { kr: "회사원", en: "Office worker", ex: "제니 씨는 회사원이에요." },
+          { kr: "의사", en: "Doctor", ex: "민수 씨는 의사예요." },
+          { kr: "요리사", en: "Chef", ex: "이 사람은 요리사예요." },
+          { kr: "한국", en: "Korea", ex: "저는 한국 사람이에요." },
+          { kr: "프랑스", en: "France", ex: "폴 씨는 프랑스 사람이에요." },
+          { kr: "이름", en: "Name", ex: "이름이 뭐예요?" }
+        ],
+        pronunciation: {
+          text: "사람이에요 [사라미에요]",
+          rule: "연음 법칙: 받침 뒤에 모음 어미가 오면 받침 소리가 넘어가 발음됩니다.",
+          samples: ["사람이에요", "한국어", "이름이", "학생이에요"]
+        },
+        quizzes: [
+          { q: "다음 빈칸에 알맞은 말은? '저는 학생____.'", opts: ["이에요", "예요", "입니다", "이"], a: 0 },
+          { q: "다음 중 받침이 없어서 '예요'를 쓰는 단어는?", opts: ["선생님", "회사원", "의사", "학생"], a: 2 },
+          { q: "'한국어'의 올바른 발음은 무엇일까요?", opts: ["한극어", "한구거", "한국어", "한구어"], a: 1 }
+        ]
+      },
+      2: {
+        title: "02과 회사에 가요",
+        grammar: "A/V-아요/어요, N에 가요/와요",
+        vocab: [
+          { kr: "회사", en: "Company", ex: "아침에 회사에 가요." },
+          { kr: "식당", en: "Restaurant", ex: "식당에서 점심을 먹어요." },
+          { kr: "커피숍", en: "Coffee shop", ex: "커피숍에서 친구를 만나요." },
+          { kr: "도서관", en: "Library", ex: "도서관에 책을 읽으러 가요." },
+          { kr: "시장", en: "Market", ex: "주말에 시장에 가요." },
+          { kr: "가다", en: "To go", ex: "지금 집에 가요." },
+          { kr: "먹다", en: "To eat", ex: "밥을 먹어요." },
+          { kr: "마시다", en: "To drink", ex: "주스를 마셔요." }
+        ],
+        pronunciation: {
+          text: "학교에 가요? [학교에 가요?↑]",
+          rule: "문말 억양: 질문할 때(의문문)는 문장 끝의 억양을 올려서 말합니다.",
+          samples: ["학교에 가요?", "회사에 가요?", "밥을 먹어요?"]
+        },
+        quizzes: [
+          { q: "'가다'의 현재형 활용으로 알맞은 것은?", opts: ["가어요", "가요", "가해요", "갔어요"], a: 1 },
+          { q: "'먹다'의 현재형 활용으로 알맞은 것은?", opts: ["먹아요", "먹어요", "먹해요", "먹고"], a: 1 },
+          { q: "장소 뒤에 붙어 이동 목적지를 나타내는 조사는?", opts: ["을", "를", "에", "은"], a: 2 }
+        ]
+      },
+      3: {
+        title: "03과 전화번호가 뭐예요?",
+        grammar: "N이/가, N이/가 아니에요",
+        vocab: [
+          { kr: "전화번호", en: "Phone number", ex: "전화번호가 몇 번이에요?" },
+          { kr: "얼마", en: "How much", ex: "이 우산 얼마예요?" },
+          { kr: "일/이/삼/사", en: "1, 2, 3, 4 (Sino-Korean)", ex: "일, 이, 삼, 사, 오..." },
+          { kr: "천 원", en: "1,000 Won", ex: "빵이 천 원이에요." },
+          { kr: "우산", en: "Umbrella", ex: "우산이 있어요." },
+          { kr: "모자", en: "Hat", ex: "모자가 예뻐요." }
+        ],
+        pronunciation: {
+          text: "뭐예요? [뭐예요?]",
+          rule: "이중모음 발음: 'ㅝ'는 [ㅜ]와 [어]를 자연스럽고 빠르게 이어서 발음합니다.",
+          samples: ["뭐예요", "쉬어요", "관악구"]
+        },
+        quizzes: [
+          { q: "'학생이 ( Not ) 아니에요'에서 빈칸에 들어갈 주격조사는?", opts: ["은", "는", "가", "이"], a: 3 },
+          { q: "숫자 '1000'의 한자어 읽기는?", opts: ["백", "천", "만", "십"], a: 1 }
+        ]
+      },
+      4: {
+        title: "04과 책상 위에 지갑이 있어요?",
+        grammar: "N에 있다/없다, N의",
+        vocab: [
+          { kr: "책상", en: "Desk", ex: "책상 위에 컴퓨터가 있어요." },
+          { kr: "지갑", en: "Wallet", ex: "가방 안에 지갑이 있어요." },
+          { kr: "위 / 아래", en: "On / Under", ex: "의자 아래에 강아지가 있어요." },
+          { kr: "앞 / 뒤", en: "Front / Behind", ex: "집 앞에 식당이 있어요." },
+          { kr: "냉장고", en: "Refrigerator", ex: "부엌에 냉장고가 있어요." }
+        ],
+        pronunciation: {
+          text: "선생님의 책 [선생니메 책]",
+          rule: "조사 '의'의 발음: 소유를 나타내는 조사 '의'는 보통 [에]로 발음합니다.",
+          samples: ["선생님의", "친구의", "나의"]
+        },
+        quizzes: [
+          { q: "'위'의 반대말은 무엇일까요?", opts: ["앞", "뒤", "아래", "옆"], a: 2 },
+          { q: "조사 '의'를 발음할 때 가장 자연스러운 소리는?", opts: ["의", "에", "아", "오"], a: 1 }
+        ]
+      },
+      5: {
+        title: "05과 사과 두 개하고 오렌지 세 개 주세요",
+        grammar: "N하고 N, N 개/명/병 주세요",
+        vocab: [
+          { kr: "사과", en: "Apple", ex: "사과 세 개 주세요." },
+          { kr: "한 / 두 / 세 / 네", en: "1, 2, 3, 4 (Native)", ex: "커피 한 잔 주세요." },
+          { kr: "개", en: "Counter for items", ex: "빵 두 개 주세요." },
+          { kr: "명", en: "Counter for people", ex: "학생 세 명이 있어요." },
+          { kr: "병", en: "Counter for bottles", ex: "물 한 병 주세요." }
+        ],
+        pronunciation: {
+          text: "밥 [밥] / 옆 [엽]",
+          rule: "받침 대표음 [ㅂ]: 받침 'ㅂ, ㅍ'은 입술을 닫아 [ㅂ] 소리로 마무리합니다.",
+          samples: ["밥", "숲", "옆", "잎"]
+        },
+        quizzes: [
+          { q: "물건을 살 때 수량을 말하는 단위명사 연결이 맞는 것은?", opts: ["사과 한 잔", "커피 두 개", "물 세 병", "사람 네 권"], a: 2 },
+          { q: "'와/과'처럼 명사를 연결하는 구어체 조사는?", opts: ["하고", "에서", "에게", "부터"], a: 0 }
+        ]
+      },
+      6: {
+        title: "06과 저는 고기를 안 먹어요",
+        grammar: "N을/를, 안 V",
+        vocab: [
+          { kr: "고기", en: "Meat", ex: "저는 고기를 안 먹어요." },
+          { kr: "비빔밥", en: "Bibimbap", ex: "점심에 비빔밥을 먹어요." },
+          { kr: "채소", en: "Vegetable", ex: "채소를 많이 먹어요." },
+          { kr: "안", en: "Not (Negation)", ex: "오늘 은 안 가요." },
+          { kr: "좋아하다", en: "To like", ex: "한국 음식을 좋아해요." }
+        ],
+        pronunciation: {
+          text: "떡볶이 [떡뽀끼] / 식당 [식땅]",
+          rule: "된소리화: 받침 'ㄱ, ㄷ, ㅂ' 뒤에 오는 자음은 된소리로 변합니다.",
+          samples: ["떡볶이", "식당", "국수"]
+        },
+        quizzes: [
+          { q: "'밥____ 먹어요' 빈칸에 들어갈 목적격 조사는?", opts: ["을", "를", "이", "가"], a: 0 },
+          { q: "'먹다'의 부정문 표현으로 알맞은 것은?", opts: ["안 먹어요", "먹 안 해요", "가 안 요", "먹지 못"], a: 0 }
+        ]
+      },
+      7: {
+        title: "07과 ‘서울행’을 꼭 보세요",
+        grammar: "N에 (시간), V-(으)세요",
+        vocab: [
+          { kr: "오늘 / 내일", en: "Today / Tomorrow", ex: "내일 친구를 만나요." },
+          { kr: "월요일~일요일", en: "Days of the week", ex: "월요일에 학원에 가요." },
+          { kr: "시 / 분", en: "Hour / Minute", ex: "2시 30분에 만나요." },
+          { kr: "보세요", en: "Please watch/look", ex: "이 영화를 꼭 보세요." }
+        ],
+        pronunciation: {
+          text: "노래 [오] vs 우산 [우]",
+          rule: "모음 [오]와 [우]: [우]를 발음할 때는 입술을 앞으로 툭 내밀어 줍니다.",
+          samples: ["오리", "우산", "포도", "우유"]
+        },
+        quizzes: [
+          { q: "상대방에게 정중하게 권유하거나 명령할 때 쓰는 어미는?", opts: ["-(으)세요", "-에 가요", "-이/가 있어요", "-안"], a: 0 },
+          { q: "'읽다' 뒤에 '-(으)세요'가 결합하면?", opts: ["읽으세요", "읽세요", "읽어세요", "읽하십시오"], a: 0 }
+        ]
+      }
+    };
+
+    function App() {
+      const [currentChapterId, setCurrentChapterId] = useState(1);
+      const [activeTab, setActiveTab] = useState('vocab'); // 'vocab' | 'pronounce' | 'quiz'
+      
+      // 선택된 과의 데이터만 동적으로 가져옴 (Memory Optimization)
+      const chapter = SEJONG_DB[currentChapterId];
+
+      const [cardIndex, setCardIndex] = useState(0);
+      const [isFlipped, setIsFlipped] = useState(false);
+      
+      // 발음 인식 상태
+      const [isRecording, setIsRecording] = useState(false);
+      const [userSpeech, setUserSpeech] = useState('');
+      const [speechMatch, setSpeechMatch] = useState(null);
+
+      // 퀴즈 상태
+      const [quizIndex, setQuizIndex] = useState(0);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+      const [quizResult, setQuizResult] = useState(null);
+
+      // 단원이 변경될 때마다 세부 상태 초기화
+      useEffect(() => {
+        setCardIndex(0);
+        setIsFlipped(false);
+        setUserSpeech('');
+        setSpeechMatch(null);
+        setQuizIndex(0);
+        setSelectedAnswer(null);
+        setQuizResult(null);
+      }, [currentChapterId]);
+
+      // 1. Web TTS (음성 재생)
+      const playAudio = (text) => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'ko-KR';
+          utterance.rate = 0.8;
+          window.speechSynthesis.speak(utterance);
+        }
+      };
+
+      // 2. Web Speech Recognition (발음 인지 및 평가)
+      const startSpeechRecognition = (targetText) => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+          alert("이 브라우저는 음성 인식을 지원하지 않습니다. Chrome 브라우저를 이용해 주세요.");
+          return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'ko-KR';
+        recognition.interimResults = false;
+
+        setIsRecording(true);
+        setUserSpeech('듣고 있습니다... 말씀하세요!');
+        setSpeechMatch(null);
+
+        recognition.start();
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript.replace(/\s+/g, '');
+          const cleanTarget = targetText.replace(/\s+/g, '');
+
+          setUserSpeech(`인식된 발음: "${event.results[0][0].transcript}"`);
+          setIsRecording(false);
+
+          if (transcript.includes(cleanTarget) || cleanTarget.includes(transcript)) {
+            setSpeechMatch('correct');
+          } else {
+            setSpeechMatch('incorrect');
+          }
+        };
+
+        recognition.onerror = () => {
+          setUserSpeech('음성을 인식하지 못했습니다. 다시 시도해 주세요.');
+          setIsRecording(false);
+        };
+
+        recognition.onend = () => setIsRecording(false);
+      };
+
+      return (
+        <div class="max-w-md mx-auto bg-white min-h-screen shadow-xl flex flex-col">
+          <header class="bg-indigo-600 text-white p-4 text-center font-bold text-lg flex justify-between items-center shadow">
+            <span>세종한국어 회화 1-1</span>
+            <span class="text-xs bg-indigo-800 px-2 py-1 rounded">경량화 버그 zero</span>
+          </header>
+
+          <div class="flex overflow-x-auto p-2 bg-indigo-50 border-b space-x-2 scrollbar-none">
+            {[1, 2, 3, 4, 5, 6, 7].map((id) => (
+              <button
+                key={id}
+                onClick={() => setCurrentChapterId(id)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                  currentChapterId === id
+                    ? 'bg-indigo-600 text-white shadow-md scale-105'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                }`}
+              >
+                0{id}과
+              </button>
+            ))}
+          </div>
+
+          <div class="p-4 border-b bg-slate-50">
+            <h2 class="text-lg font-extrabold text-gray-800">{chapter.title}</h2>
+            <p class="text-xs text-indigo-600 font-semibold mt-1">주요 문법: {chapter.grammar}</p>
+          </div>
+
+          <div class="flex border-b text-center text-sm font-medium text-gray-500 bg-white">
+            <button
+              onClick={() => setActiveTab('vocab')}
+              className={`flex-1 py-3 ${activeTab === 'vocab' ? 'border-b-2 border-indigo-600 text-indigo-600 font-bold' : ''}`}
+            >
+              📖 단어/표현 ({chapter.vocab.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('pronounce')}
+              className={`flex-1 py-3 ${activeTab === 'pronounce' ? 'border-b-2 border-indigo-600 text-indigo-600 font-bold' : ''}`}
+            >
+              🎙️ 발음 클리닉
+            </button>
+            <button
+              onClick={() => setActiveTab('quiz')}
+              className={`flex-1 py-3 ${activeTab === 'quiz' ? 'border-b-2 border-indigo-600 text-indigo-600 font-bold' : ''}`}
+            >
+              ✏️ 확인 퀴즈
+            </button>
+          </div>
+
+          <main class="flex-1 p-4 flex flex-col justify-between">
+            {/* 1. 단어/표현 카드 모듈 */}
+            {activeTab === 'vocab' && (
+              <div class="flex flex-col items-center justify-between flex-1">
+                <div 
+                  onClick={() => setIsFlipped(!isFlipped)}
+                  class="w-full h-64 bg-gradient-to-br from-indigo-50 to-blue-50 border-2 border-indigo-200 rounded-2xl flex flex-col items-center justify-center p-6 text-center cursor-pointer shadow-sm my-auto transition-all transform hover:scale-102"
+                >
+                  {!isFlipped ? (
+                    <div>
+                      <p class="text-xs text-indigo-400 font-bold mb-2">카드를 터치하면 뜻이 나옵니다</p>
+                      <h3 class="text-3xl font-black text-gray-800 mb-4">{chapter.vocab[cardIndex].kr}</h3>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); playAudio(chapter.vocab[cardIndex].kr); }}
+                        class="bg-indigo-600 text-white px-4 py-2 rounded-full text-xs font-bold flex items-center mx-auto space-x-1 hover:bg-indigo-700 shadow"
+                      >
+                        🔊 표준 발음 듣기
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <p class="text-xs text-emerald-500 font-bold mb-2">ENGLISH & EXAMPLE</p>
+                      <h4 class="text-2xl font-bold text-gray-700 mb-2">{chapter.vocab[cardIndex].en}</h4>
+                      <p class="text-sm text-gray-600 bg-white p-3 rounded-lg border border-indigo-100 mt-2 shadow-inner">
+                        "{chapter.vocab[cardIndex].ex}"
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div class="flex justify-between w-full mt-4 items-center">
+                  <button 
+                    disabled={cardIndex === 0}
+                    onClick={() => { setCardIndex(cardIndex - 1); setIsFlipped(false); }}
+                    class="px-4 py-2 bg-gray-200 rounded-lg text-xs font-bold disabled:opacity-40"
+                  >
+                    이전 단어
+                  </button>
+                  <span class="text-xs text-gray-500 font-bold">{cardIndex + 1} / {chapter.vocab.length}</span>
+                  <button 
+                    disabled={cardIndex === chapter.vocab.length - 1}
+                    onClick={() => { setCardIndex(cardIndex + 1); setIsFlipped(false); }}
+                    class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold disabled:opacity-40"
+                  >
+                    다음 단어
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 2. 발음 클리닉 모듈 */}
+            {activeTab === 'pronounce' && (
+              <div class="flex flex-col items-center justify-between flex-1 text-center">
+                <div class="w-full bg-amber-50 p-4 rounded-xl border border-amber-200 text-left mb-4">
+                  <p class="text-xs font-bold text-amber-800 mb-1">💡 교재 핵심 발음 법칙</p>
+                  <p class="text-xs text-amber-900 leading-relaxed">{chapter.pronunciation.rule}</p>
+                </div>
+
+                <div class="w-full bg-slate-50 p-6 rounded-xl border border-slate-200 my-auto">
+                  <p class="text-xs text-slate-400 mb-1">오늘의 목표 발음</p>
+                  <h3 class="text-2xl font-black text-indigo-700 mb-2">{chapter.pronunciation.text}</h3>
+                  <button 
+                    onClick={() => playAudio(chapter.pronunciation.text)}
+                    class="mt-2 text-xs bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-bold hover:bg-indigo-200"
+                  >
+                    🔊 원어민 소리 듣기
+                  </button>
+                </div>
+
+                <div class="my-4">
+                  <button 
+                    onClick={() => startSpeechRecognition(chapter.pronunciation.text)}
+                    disabled={isRecording}
+                    class={`w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl shadow-lg transition-transform ${
+                      isRecording ? 'bg-red-500 animate-pulse scale-110' : 'bg-indigo-600 hover:bg-indigo-700'
+                    }`}
+                  >
+                    🎙️
+                  </button>
+                  <p class="text-xs text-gray-500 mt-2 font-medium">
+                    {isRecording ? "듣고 있습니다... 발음해 주세요!" : "마이크 버튼을 누르고 따라 말하세요"}
+                  </p>
+                </div>
+
+                {userSpeech && (
+                  <div class="w-full p-3 rounded-lg bg-gray-100 text-xs">
+                    <p class="font-medium text-gray-700">{userSpeech}</p>
+                    {speechMatch === 'correct' && (
+                      <p class="text-emerald-600 font-extrabold mt-1 text-sm">🎉 정확한 발음입니다! 참 잘했어요!</p>
+                    )}
+                    {speechMatch === 'incorrect' && (
+                      <p class="text-rose-500 font-extrabold mt-1 text-sm">😅 다시 도전해 보세요! 소리를 들으며 연습해 보세요.</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 3. 과별 확인 퀴즈 모듈 */}
+            {activeTab === 'quiz' && (
+              <div class="flex flex-col flex-1 justify-between">
+                <div>
+                  <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 mb-4">
+                    <span class="text-xs font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">
+                      문제 {quizIndex + 1} / {chapter.quizzes.length}
+                    </span>
+                    <p class="text-base font-bold text-gray-800 mt-2">
+                      {chapter.quizzes[quizIndex].q}
+                    </p>
+                  </div>
+
+                  <div class="space-y-2">
+                    {chapter.quizzes[quizIndex].opts.map((opt, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setSelectedAnswer(idx)}
+                        className={`w-full p-3 rounded-lg text-left text-sm font-medium border transition-all ${
+                          selectedAnswer === idx
+                            ? 'border-indigo-600 bg-indigo-50 text-indigo-700 font-bold'
+                            : 'border-gray-200 bg-white hover:bg-gray-50'
+                        }`}
+                      >
+                        {idx + 1}. {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <button
+                    disabled={selectedAnswer === null}
+                    onClick={() => {
+                      if (selectedAnswer === chapter.quizzes[quizIndex].a) {
+                        setQuizResult('correct');
+                      } else {
+                        setQuizResult('incorrect');
+                      }
+                    }}
+                    class="w-full py-3 bg-indigo-600 text-white rounded-lg font-bold disabled:opacity-40"
+                  >
+                    정답 확인하기
+                  </button>
+
+                  {quizResult === 'correct' && (
+                    <div class="text-center mt-3">
+                      <p class="text-emerald-600 font-bold">⭕ 정답입니다!</p>
+                      {quizIndex < chapter.quizzes.length - 1 && (
+                        <button 
+                          onClick={() => {
+                            setQuizIndex(quizIndex + 1);
+                            setSelectedAnswer(null);
+                            setQuizResult(null);
+                          }}
+                          class="mt-2 text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded font-bold"
+                        >
+                          다음 문제 풀기 ➡️
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  {quizResult === 'incorrect' && (
+                    <p class="text-center text-rose-500 font-bold mt-3">❌ 틀렸습니다. 다시 고민해 보세요!</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
