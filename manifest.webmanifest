@@ -1,0 +1,17 @@
+{
+  "name": "Korean with Juju 쌤 · 수업 자료",
+  "short_name": "Juju 한국어",
+  "description": "세종학당 한국어 3B TTT 확인자료 모음",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1E2A47",
+  "theme_color": "#1E2A47",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
