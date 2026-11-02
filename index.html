@@ -236,8 +236,9 @@ window.addEventListener('online', net); window.addEventListener('offline', net);
 
 /* ---------- 서비스 워커 ---------- */
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).then(reg => reg.update()).catch(() => {}));
 }
 </script>
+<script src="app-update.js" data-page-version="2026-11-02-r2" defer></script>
 </body>
 </html>
