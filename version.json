@@ -1,9 +1,10 @@
 {
-  "release": "2026-11-11-lesson18-r4",
+  "release": "2026-11-12-grammar-r1",
   "pages": {
-    "index.html": "2026-11-02-r2",
+    "index.html": "2026-11-12-grammar-r1",
     "lesson16-ttt.html": "2026-11-02-r3",
     "lesson17-ttt.html": "2026-11-09-lesson17-final-r4",
-    "lesson18-ttt.html": "2026-11-11-lesson18-r4"
+    "lesson18-ttt.html": "2026-11-11-lesson18-r4",
+    "grammar-irregular.html": "2026-11-12-grammar-r1"
   }
 }
