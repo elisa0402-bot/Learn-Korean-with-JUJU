@@ -1,7 +1,7 @@
 {
-  "release": "2026-11-20-lesson19-r7",
+  "release": "2026-11-20-lesson19-r8",
   "pages": {
-    "index.html": "2026-11-20-navigation-r1",
+    "index.html": "2026-11-20-home-r2",
     "lesson16-ttt.html": "2026-11-20-navigation-r1",
     "lesson17-ttt.html": "2026-11-20-navigation-r1",
     "lesson18-ttt.html": "2026-11-20-navigation-r1",
@@ -12,6 +12,6 @@
     "lesson13-ttt.html": "2026-11-20-navigation-r1",
     "lesson14-ttt.html": "2026-11-20-navigation-r1",
     "lesson15-ttt.html": "2026-11-20-navigation-r1",
-    "lesson19-ttt.html": "2026-11-20-lesson19-r7"
+    "lesson19-ttt.html": "2026-11-20-lesson19-r8"
   }
 }
