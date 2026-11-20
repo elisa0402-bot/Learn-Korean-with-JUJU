@@ -165,6 +165,7 @@ const LESSONS = [
     grammar:'-(으)려다가 · -고 말다 · -고 말겠다 · -는 반면',
     en:'Furniture and home appliances', fr:'Meubles et appareils ménagers', c:'var(--c1)' }
 ];
+LESSONS.push({no:19,file:'lesson19-ttt.html',title:'한국 예절에 대하여 조언해 주세요',grammar:'인간관계 · 예절 · 어휘',en:'Korean etiquette · Vocabulary',fr:'Politesse en Corée · Vocabulaire',c:'var(--c2)',meta:'어휘 카드 · 문장 · 그림 말하기'});
 const TOOLS = [
   { file:'hangeul-trainer.html', title:'한글 연습', grammar:'자음 · 모음 · 받침',
     en:'Hangeul trainer', fr:'Entraînement au hangeul', c:'var(--c7)', meta:'읽기 · 쓰기 연습' }
@@ -241,6 +242,6 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).then(reg => reg.update()).catch(() => {}));
 }
 </script>
-<script src="app-update.js" data-page-version="2026-11-17-ai-news-r1" defer></script>
+<script src="app-update.js" data-page-version="2026-11-20-navigation-r1" defer></script>
 </body>
 </html>
